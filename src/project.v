@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_adcsees (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -26,7 +26,6 @@ wire       rst_n_w;
 assign ui_in_w = ui_in;
 assign uo_out = uo_out_w;
 assign uio_out = uio_out_w;
-assign ena_w = ena;
 assign clk_w = clk;
 assign rst_n_w = rst_n;
 
@@ -41,6 +40,6 @@ adcsees adcsees_u1(
     .adc_8b_o(uo_out_w)
 );
 
-wire _unused = &{uio_oe, ui_in_w[4:7], uio_in, uio_out_w[3:7], 1'b0};
+    wire _unused = &{uio_oe, ui_in_w[4:7], uio_in, uio_out_w[3:7], ena, 1'b0};
 
 endmodule
