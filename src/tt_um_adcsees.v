@@ -28,6 +28,7 @@ assign uio_out = uio_out_w;
 assign clk_w = clk;
 assign rst_n_w = rst_n;
 assign uio_oe = 8'b0000_0111;
+assign uio_out_w[7:3] = 5'b00000;
 
 adcsees adcsees_u1(
     .clk50(clk_w),
@@ -40,6 +41,6 @@ adcsees adcsees_u1(
     .adc_8b_o(uo_out_w)
 );
 
-wire _unused = &{ui_in_w[7:4], uio_in, uio_out_w[7:3], ena, 1'b0};
+wire _unused = &{ui_in_w[7:4], uio_in, ena, 1'b0};
 
 endmodule
