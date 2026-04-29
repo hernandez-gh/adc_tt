@@ -89,7 +89,7 @@ endmodule
 module clkdiv (
     input       clk50,        // 50MHz input
     input       rst,          // active low reset
-    output reg  clk_2M8       // 2.8MHz output
+    output wire  clk_2M8       // 2.8MHz output
 );
 
 reg [5:0] counter_r;
