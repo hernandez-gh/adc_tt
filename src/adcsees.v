@@ -137,10 +137,10 @@ always @ (negedge clk_i or negedge rst_n)  // 16-cycle counter
 always@(*)
 begin						
 	case (sclk_count) 
-		4'b0010:	adc_saddr <= ~data_addr[2]; //adc_addr[2];
-		4'b0011:	adc_saddr <= ~data_addr[1]; //adc_addr[1];
-		4'b0100:	adc_saddr <= ~data_addr[0]; //adc_addr[0];
-		default:	adc_saddr <= 1'b0;
+		4'b0010:	adc_saddr = ~data_addr[2]; //adc_addr[2];
+		4'b0011:	adc_saddr = ~data_addr[1]; //adc_addr[1];
+		4'b0100:	adc_saddr = ~data_addr[0]; //adc_addr[0];
+		default:	begin adc_saddr = 1'b0; end
 	endcase
 end	
 
@@ -193,5 +193,5 @@ module data_ram	(
 	
 	//read port
 	assign	data_o = data_ram[addr_rd];
-	
+	wire _unused2 = &{dclk_w, adc_pdata_w[3:0], sclk_count_w, 1'b0};
 endmodule
