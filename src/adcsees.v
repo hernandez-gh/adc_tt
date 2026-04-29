@@ -43,7 +43,7 @@ module adc_ctrl (
 	output	[7:0]	adc_8b_o	// 8-bit output 
 );
 
-wire    	    dclk_w;         // divided clock wire (44.1 kHz)
+//wire    	    dclk_w;         // divided clock wire (44.1 kHz)
 wire    [2:0]   adc_addr_w;     // parallel ADC channel select wire
 wire    [2:0]   data_addr_w;
 wire    [11:0]  adc_pdata_w;    // 12-bit wire (output from adc_interface)
@@ -52,9 +52,7 @@ wire    	    clk_addr_w;
 
 
 assign adc_sclk = clk_i;       	// PLL clock (2.8 MHz)
-
 assign adc_addr_w = adc_addr;   // ADC Channel select
-
 assign adc_cs_n = ~rst_n;		// chip select (active low enable)
 
 // Interface with ADC 
@@ -123,8 +121,8 @@ endmodule
 reg 	[3:0]	sclk_count;					// clk counter 0 to 15
 reg		[11:0] 	din_ff;						// ff register to deserialize serial input
 
-wire 	[3:0] 	sclk_count_w;
-assign 			sclk_count_w = sclk_count;
+//wire 	[3:0] 	sclk_count_w;
+//assign 			sclk_count_w = sclk_count;
 
 /* Handle clock counting */
 always @ (negedge clk_i or negedge rst_n)  // 16-cycle counter
@@ -132,7 +130,7 @@ always @ (negedge clk_i or negedge rst_n)  // 16-cycle counter
     sclk_count <= 4'b0000;
   else
     sclk_count <= sclk_count + 1'b1;
-
+end
 // serialize adc channel selection
 always@(*)
 begin						
@@ -148,28 +146,26 @@ assign clk_addr = (sclk_count == 4'b0001);
 
 /* Handle address incrementing to cycle through reading
    bytes from the ADC device input pins */
-always @ (negedge clk_addr or negedge rst_n)
+	 always @ (negedge clk_addr or negedge rst_n) begin
   if (!rst_n) 
     data_addr <= 3'b000;
   else
     data_addr <= data_addr + 1'b1;
-
+end
 //	DeSerialize input data into a 12-bit register during clock cycles 4 -> 15
-always @ (negedge clk_i or negedge rst_n)
-  if (!rst_n)
-      din_ff <= 12'd0;
-  else
-    casez (sclk_count)
-			4'b01??, 4'b1???: din_ff <= {din_ff[10:0],sdata_i};	
-    endcase
-
-// Parallel data out every 16 clock cycles
-always @ (negedge clk_i) begin
-  if (sclk_count == 4'b0000) 
-	  begin
-		  pdata_o <= din_ff;
-	  end
-  end
+	 always @(posedge clk_i or negedge rst_n) begin
+    if (!rst_n) begin
+        din_ff  <= 12'd0;
+        pdata_o <= 12'd0;
+    end else begin
+        casez (sclk_count)
+            4'b01??, 4'b1???: din_ff <= {din_ff[10:0], sdata_i};
+            default:          din_ff <= din_ff;
+        endcase
+        if (sclk_count == 4'b0000)
+            pdata_o <= din_ff;
+    end
+end
 
 endmodule
 
