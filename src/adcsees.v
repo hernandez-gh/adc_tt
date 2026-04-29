@@ -193,5 +193,5 @@ module data_ram	(
 	
 	//read port
 	assign	data_o = data_ram[addr_rd];
-	wire _unused2 = &{dclk_w, adc_pdata_w[3:0], sclk_count_w, 1'b0};
+
 endmodule
