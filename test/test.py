@@ -12,7 +12,7 @@ async def reset_dut(dut, cycles=5):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await Timer(1, units="ns")
+    await Timer(1, unit="ns")
     for _ in range(cycles):
         await RisingEdge(dut.clk)
     dut.rst_n.value = 1
@@ -53,7 +53,7 @@ async def drive_adc_frame(dut, value12):
 @cocotb.test()
 async def test_reset_and_uio_oe(dut):
     """Prueba básica del wrapper: reset, dirección de uio y CS."""
-    cocotb.start_soon(Clock(dut.clk, 20, units="ns").start())  # 50 MHz
+    cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())  # 50 MHz
 
     await reset_dut(dut)
 
@@ -69,7 +69,7 @@ async def test_reset_and_uio_oe(dut):
 @cocotb.test()
 async def test_adc_serial_to_parallel_channel0(dut):
     """Inyecta una muestra ADC serial y revisa que aparezca truncada a 8 bits."""
-    cocotb.start_soon(Clock(dut.clk, 20, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
 
     await reset_dut(dut)
 
@@ -91,7 +91,7 @@ async def test_adc_serial_to_parallel_channel0(dut):
 @cocotb.test()
 async def test_adc_channel_address_outputs_activity(dut):
     """Verifica que adc_clk, adc_out y adc_cs_n estén conectados al bus uio_out."""
-    cocotb.start_soon(Clock(dut.clk, 20, units="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
 
     await reset_dut(dut)
 
