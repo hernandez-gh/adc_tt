@@ -125,7 +125,7 @@ reg		[11:0] 	din_ff;						// ff register to deserialize serial input
 //assign 			sclk_count_w = sclk_count;
 
 /* Handle clock counting */
-always @ (negedge clk_i or negedge rst_n)  // 16-cycle counter
+	 always @(negedge clk_i or negedge rst_n) begin
   if (!rst_n) 
     sclk_count <= 4'b0000;
   else
@@ -146,7 +146,7 @@ assign clk_addr = (sclk_count == 4'b0001);
 
 /* Handle address incrementing to cycle through reading
    bytes from the ADC device input pins */
-	 always @ (negedge clk_addr or negedge rst_n) begin
+	 always @(negedge clk_addr or negedge rst_n) begin
   if (!rst_n) 
     data_addr <= 3'b000;
   else
